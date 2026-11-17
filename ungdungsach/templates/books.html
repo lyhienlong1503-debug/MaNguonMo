@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Quản lý Sách theo Danh mục{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0">Quản lý Sách theo Danh mục</h3>
+    <a href="{{ url_for('save_book', category_id=selected_category) }}" class="btn btn-success shadow-sm">
+        Thêm Sách mới
+    </a>
+</div>
+
+<form method="get" action="{{ url_for('list_books') }}" class="row g-2 mb-3 bg-white p-3 rounded shadow-sm mx-0">
+    <div class="col-md-4">
+        <select name="category_id" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Tất cả Danh mục --</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if selected_category == cat.id %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-5">
+        <input type="text" name="q" value="{{ keyword }}" class="form-control" placeholder="Tìm theo tên sách hoặc tác giả...">
+    </div>
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+        {% if selected_category or keyword %}
+            <a href="{{ url_for('list_books') }}" class="btn btn-outline-secondary text-nowrap">Xóa lọc</a>
+        {% endif %}
+    </div>
+</form>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover table-fixed mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 7%;" class="ps-3">Mã</th>
+                    <th style="width: 31%;">Tên sách</th>
+                    <th style="width: 20%;">Tác giả</th>
+                    <th style="width: 18%;">Danh mục</th>
+                    <th style="width: 10%;" class="text-center">Năm XB</th>
+                    <th style="width: 10%;" class="text-center">Tồn kho</th>
+                    <th style="width: 10%;" class="text-end pe-3">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in books %}
+                <tr>
+                    <td class="ps-3">{{ b.id }}</td>
+                    <td class="fw-semibold" title="{{ b.title }}">{{ b.title }}</td>
+                    <td title="{{ b.author }}">{{ b.author }}</td>
+                    <td>
+                        <a href="{{ url_for('list_books', category_id=b.category_id) }}"
+                           class="badge bg-secondary text-decoration-none fw-normal">
+                            {{ b.category_name }}
+                        </a>
+                    </td>
+                    <td class="text-center">{{ b.published_year or '-' }}</td>
+                    <td class="text-center">
+                        {% if b.stock > 0 %}
+                            <span class="badge rounded-pill bg-success">{{ b.stock }}</span>
+                        {% else %}
+                            <span class="badge rounded-pill bg-danger">Hết</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end pe-3">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{{ url_for('save_book', id=b.id) }}" class="btn btn-sm btn-outline-primary py-0 px-2" title="Sửa">Sửa</a>
+                            <form method="post" action="{{ url_for('delete_book', id=b.id) }}" class="d-inline m-0"
+                                  onsubmit="return confirm('Xác nhận xóa cuốn sách này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2" title="Xóa">Xóa</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Không tìm thấy cuốn sách nào phù hợp.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

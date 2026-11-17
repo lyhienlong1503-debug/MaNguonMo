@@ -1,0 +1,11 @@
+/.venv
+/.venv-1
+/app.py
+/instance
+/library.db
+/sodiem.py
+/static
+/templates
+/ungdungsach.zip
+/view.py
+/__pycache__

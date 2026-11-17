@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Đăng Ký Tài Khoản{% endblock %}
+
+{% block content %}
+<style>
+    .field-error { color: #dc2626; font-size: 12px; margin-top: 4px; display: block; }
+    .switch-link { text-align: center; margin-top: 16px; font-size: 13px; color: #475569; }
+    .switch-link a { color: #2563eb; font-weight: bold; text-decoration: none; }
+    .switch-link a:hover { text-decoration: underline; }
+</style>
+
+<div class="card">
+    <h2>Đăng Ký Tài Khoản</h2>
+    <p class="subtitle">Tạo tài khoản mới cùng địa chỉ email</p>
+
+    <form method="POST" action="{{ url_for('register') }}" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username() }}
+            {% for err in form.username.errors %}
+                <span class="field-error">⚠️ {{ err }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email() }}
+            {% for err in form.email.errors %}
+                <span class="field-error">⚠️ {{ err }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password() }}
+            {% for err in form.password.errors %}
+                <span class="field-error">⚠️ {{ err }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password() }}
+            {% for err in form.confirm_password.errors %}
+                <span class="field-error">⚠️ {{ err }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Trường Checkbox Điều khoản -->
+        <div class="checkbox-group" style="margin-bottom: 12px;">
+            {{ form.accept_terms() }}
+            {{ form.accept_terms.label(style="margin-bottom: 0; font-weight: normal; cursor: pointer; font-size: 13px;") }}
+        </div>
+        {% for err in form.accept_terms.errors %}
+            <span class="field-error" style="margin-bottom: 15px; margin-top: -8px;">⚠️ {{ err }}</span>
+        {% endfor %}
+
+        {{ form.submit(class="btn-submit", style="background: #10b981;") }}
+    </form>
+
+    <div class="switch-link">
+        Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập ngay</a>
+    </div>
+</div>
+{% endblock %}

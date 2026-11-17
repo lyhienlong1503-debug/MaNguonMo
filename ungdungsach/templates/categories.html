@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Quản lý Danh mục Sách{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold">
+                    {% if edit_category %}Cập nhật Danh mục{% else %}Thêm Danh mục mới{% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{{ url_for('save_category') }}">
+                    {% if edit_category %}
+                        <input type="hidden" name="id" value="{{ edit_category.id }}">
+                    {% endif %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tên danh mục <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" required
+                               value="{{ edit_category.name if edit_category else '' }}"
+                               placeholder="VD: Công nghệ thông tin">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Mô tả</label>
+                        <textarea name="description" class="form-control" rows="3"
+                                  placeholder="Mô tả ngắn về danh mục...">{{ edit_category.description if edit_category else '' }}</textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            {% if edit_category %}Lưu thay đổi{% else %}Thêm mới{% endif %}
+                        </button>
+                        {% if edit_category %}
+                            <a href="{{ url_for('list_categories') }}" class="btn btn-outline-secondary">Hủy</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">Danh sách Danh mục ({{ categories|length }})</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover table-fixed mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 10%;" class="ps-3">ID</th>
+                            <th style="width: 28%;">Tên danh mục</th>
+                            <th style="width: 34%;">Mô tả</th>
+                            <th style="width: 14%;" class="text-center">Số sách</th>
+                            <th style="width: 14%;" class="text-end pe-3">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cat in categories %}
+                        <tr>
+                            <td class="ps-3">{{ cat.id }}</td>
+                            <td class="fw-semibold" title="{{ cat.name }}">{{ cat.name }}</td>
+                            <td class="text-muted" title="{{ cat.description or '' }}">{{ cat.description or '-' }}</td>
+                            <td class="text-center">
+                                <a href="{{ url_for('list_books', category_id=cat.id) }}" class="badge bg-primary text-decoration-none">
+                                    {{ cat.book_count }} sách
+                                </a>
+                            </td>
+                            <td class="text-end pe-3">
+                                <div class="d-inline-flex gap-1">
+                                    <a href="{{ url_for('list_categories', edit_id=cat.id) }}"
+                                       class="btn btn-sm btn-outline-primary py-0 px-2" title="Sửa">Sửa</a>
+                                    <form method="post" action="{{ url_for('delete_category', id=cat.id) }}" class="d-inline m-0"
+                                          onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2"
+                                                {% if cat.book_count > 0 %}disabled title="Đang có sách, không thể xóa"{% endif %}>
+                                            Xóa
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">Chưa có danh mục nào.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Hồ Sơ Cá Nhân{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h2>Hồ Sơ Cá Nhân</h2>
+    <p class="subtitle">Thông tin tài khoản đang đăng nhập</p>
+
+    <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 20px; text-align: left;">
+        <p style="margin-bottom: 10px;">👤 <b>Tên tài khoản:</b> {{ user }}</p>
+        <p style="margin-bottom: 10px;">📧 <b>Địa chỉ Email:</b> {{ email }}</p>
+        <p style="margin-bottom: 10px;">🔐 <b>Trạng thái:</b> <span style="color: #16a34a; font-weight: bold;">Đã xác thực</span></p>
+        <p>🕒 <b>Ghi nhớ đăng nhập:</b> {{ "Có (7 ngày)" if session.permanent else "Không" }}</p>
+    </div>
+
+    <form action="{{ url_for('logout') }}" method="POST">
+        <button type="submit" class="btn-submit" style="background: #dc2626;">Đăng Xuất Tài Khoản</button>
+    </form>
+</div>
+{% endblock %}

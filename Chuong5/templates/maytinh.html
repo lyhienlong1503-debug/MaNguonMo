@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Máy Tính Cơ Bản{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Máy Tính Cơ Bản</h2>
+    <p class="subtitle">Cộng, trừ, nhân, chia hai số</p>
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Số a:</label>
+            <input type="text" name="a" value="{{ a }}" placeholder="Nhập số a" required>
+        </div>
+        <div class="form-group">
+            <label>Phép tính:</label>
+            <select name="op">
+                <option value="+" {% if op == '+' %}selected{% endif %}>Cộng (+)</option>
+                <option value="-" {% if op == '-' %}selected{% endif %}>Trừ (-)</option>
+                <option value="*" {% if op == '*' %}selected{% endif %}>Nhân (*)</option>
+                <option value="/" {% if op == '/' %}selected{% endif %}>Chia (/)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Số b:</label>
+            <input type="text" name="b" value="{{ b }}" placeholder="Nhập số b" required>
+        </div>
+        <button type="submit" class="btn-submit">Tính Toán</button>
+    </form>
+
+    {% if error %}
+        <div class="alert-error">⚠️ {{ error }}</div>
+    {% endif %}
+
+    {% if result is not none %}
+        <div class="result-box" style="background: #dcfce7; color: #166534; font-size: 22px;">
+            Kết quả: {{ result }}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

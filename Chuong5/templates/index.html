@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Tính Điểm Học Phần{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Tính Điểm Học Phần</h2>
+    <p class="subtitle">Hệ số: Điểm 1 (10%) + Điểm 2 (30%) + Điểm 3 (60%)</p>
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Điểm 1 (10%):</label>
+            <input type="text" name="diem1" value="{{ d1 }}" placeholder="Nhập từ 0 - 10" required>
+        </div>
+        <div class="form-group">
+            <label>Điểm 2 (30%):</label>
+            <input type="text" name="diem2" value="{{ d2 }}" placeholder="Nhập từ 0 - 10" required>
+        </div>
+        <div class="form-group">
+            <label>Điểm 3 - Điểm thi (60%):</label>
+            <input type="text" name="diem3" value="{{ d3 }}" placeholder="Dưới 1 bị điểm liệt" required>
+        </div>
+        <button type="submit" class="btn-submit">Tính Điểm</button>
+    </form>
+
+    {% if error %}
+        <div class="alert-error">⚠️ {{ error }}</div>
+    {% endif %}
+
+    {% if ket_qua %}
+        <div class="result-box" style="background: #dcfce7; color: #166534;">
+            <div style="font-size: 22px;">Điểm TB: {{ dtb }}</div>
+            <div style="font-size: 16px; margin-top: 4px;">Xếp loại: {{ xep_loai }}</div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
